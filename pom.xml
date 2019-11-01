@@ -9,6 +9,7 @@
     <version>1.0</version>
     <modules>
         <module>spring-boot-helloworld</module>
+        <module>spring-boot-configuration</module>
     </modules>
     <packaging>pom</packaging>
 
