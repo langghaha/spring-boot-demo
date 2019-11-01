@@ -21,7 +21,7 @@ public class HelloWorldApplication {
     }
 
     /**
-     * 浏览器输入 ip:8000/hello
+     * 浏览器输入 ip:8001/hello
      * 界面显示Hello World
      *
      * @return
