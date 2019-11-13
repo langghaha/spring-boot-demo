@@ -53,7 +53,7 @@
     </dependencies>
 
     <build>
-        <finalName>spring-boot-jpa</finalName>
+        <finalName>${artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
