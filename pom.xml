@@ -17,6 +17,7 @@
         <module>spring-boot-activemq</module>
         <module>spring-boot-quartz</module>
         <module>spring-boot-session</module>
+        <module>spring-boot-websocket</module>
     </modules>
     <packaging>pom</packaging>
 

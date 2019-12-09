@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css"/>
+
+</head>
+
+<body>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">消息区</label>
+    <div class="layui-input-block">
+        <textarea style="width: auto;" id="messageContent" readonly="readonly" cols="100" rows="10"
+                  class="layui-textarea"></textarea>
+    </div>
+</div>
+
+<hr class="layui-bg-blue">
+
+<div class="layui-form-item">
+    <label class="layui-form-label">用户区</label>
+    <div class="layui-input-block">
+        <input id="username" style="width: auto;float: left;" type="text" name="title" lay-verify="required"
+               placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        <button id="join" style="margin-left: 15px;" type="button" class="layui-btn">加入聊天</button>
+        <button id="exit" type="button" class="layui-btn layui-btn-danger">退出聊天</button>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <div class="layui-input-block">
+        <input id="message" style="width: auto;float: left;" type="text" name="title" lay-verify="required"
+               placeholder="请输入消息" autocomplete="off" class="layui-input">
+        <button id="send" style="margin-left: 15px;" type="button" class="layui-btn layui-btn-normal">发送</button>
+        <button id="clear" type="button" class="layui-btn layui-btn-warm">清屏</button>
+    </div>
+</div>
+
+<!--您的Layui代码start-->
+<script type="text/javascript">
+    layui.use(['layer', 'element'], function () {
+        var layer = layui.layer //弹层
+            , element = layui.element; //元素操作
+
+        var ws;
+        $("#join").unbind('click').bind('click', function () {
+            if (ws && ws.readyState === 1) {
+                layer.msg("已经加入过聊天");
+                return;
+            }
+            var username = $('#username').val();
+            if (username === '' || typeof username === 'undefined') {
+                layer.msg("请输入用户名");
+                return;
+            }
+            var url = 'ws://10.1.211.172:8080/websocket/' + username;
+            ws = new WebSocket(url);
+            ws.onmessage = function (event) {
+                //接收服务端消息
+                if (event) {
+                    $('#messageContent').append(event.data + '\n');
+                }
+            };
+            ws.onclose = function (event) {
+                $('#messageContent').append('用户[' + username + ']退出聊天\n');
+            };
+        });
+
+        //发送消息
+        $('#send').unbind('click').bind('click', function () {
+            if (ws && ws.readyState === 1) {
+                var msg = $('#message').val();
+                if (msg === '' || typeof msg === 'undefined') {
+                    layer.msg("没有消息要发送");
+                    return;
+                }
+                ws.send(msg);
+                $('#message').val('');
+            } else {
+                layer.msg("还未加入聊天");
+            }
+        });
+
+        //回车发消息
+        $('#message').keyup(function(event){
+            var k = event.keyCode;
+            if(k == 13){
+                $('#send').click();
+            }
+        });
+
+        //离开聊天
+        $('#exit').unbind('click').bind('click', function () {
+            if (ws && ws.readyState === 1) {
+                ws.close();
+            } else {
+                layer.msg("已经不在聊天了");
+            }
+        });
+
+        //清屏
+        $('#clear').unbind('click').bind('click', function () {
+            $('#messageContent').empty();
+        });
+    });
+</script>
+</body>
+</html>

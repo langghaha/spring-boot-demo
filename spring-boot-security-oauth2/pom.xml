@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-boot-security</artifactId>
+    <artifactId>spring-boot-security-oauth2</artifactId>
     <packaging>pom</packaging>
 
     <modules>
